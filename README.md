@@ -45,6 +45,12 @@ This will compile the source code, generate parser code from grammar definitions
 At this time the repository does not include a packaged CLI tool or published artifact. You can integrate the repair
 pipeline into your own Java application via the provided classes.
 
+```java
+import de.papenhagen.toonrepair.ToonRepair;
+
+String output = ToonRepair.parse("input");
+```
+
 A typical usage flow might be:
 
 1. Parse a TOON string using the ANTLR-generated parser
