@@ -15,6 +15,8 @@ public class ToonRepair {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
 
+    private static final String QUOTED_STRING_REGEX = "^\"(?:[^\"\\\\\\x00-\\x1F]|\\\\[\"\\\\/bfnrt])*\"$";
+
     /**
      * Parses TOON input with automatic repair-on-error.
      * This method attempts to parse the input multiple times, applying repairs
@@ -24,7 +26,7 @@ public class ToonRepair {
      * @throws IllegalStateException if repair does not converge within the allowed number of attempts
      */
     public static String parse(final String input) {
-        String current = input;
+        String current = input.replaceAll(QUOTED_STRING_REGEX, "");
 
         // Attempts parse with repair until convergence or limit
         for (int attempt = 0; attempt < 3; attempt++) {

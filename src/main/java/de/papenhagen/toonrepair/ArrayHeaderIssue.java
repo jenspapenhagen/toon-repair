@@ -34,8 +34,8 @@ final class ArrayHeaderIssue implements SyntaxIssue {
      */
     @Override
     public String apply(final String source) {
-             int start = token.getStartIndex();
-             int end = token.getStopIndex();
+        int start = token.getStartIndex();
+        int end = token.getStopIndex();
         if (start < 0) {
             return source;
         }
@@ -48,14 +48,16 @@ final class ArrayHeaderIssue implements SyntaxIssue {
         while (actualStart > 0 && source.charAt(actualStart) != '[') {
             actualStart--;
         }
-        
+
         int actualEnd = (actualStart >= 0 && source.charAt(actualStart) == '[') ? actualStart : start;
         while (actualEnd < source.length() - 1 && source.charAt(actualEnd) != ']') {
             actualEnd++;
         }
 
-        if (actualStart < 0 || actualEnd >= source.length() || 
-            source.charAt(actualStart) != '[' || source.charAt(actualEnd) != ']') {
+        if (actualStart < 0 ||
+                actualEnd >= source.length() ||
+                source.charAt(actualStart) != '[' ||
+                source.charAt(actualEnd) != ']') {
             return source;
         }
 
@@ -66,11 +68,12 @@ final class ArrayHeaderIssue implements SyntaxIssue {
         }
 
         final String content = matcher.group(1);
-        final int length = extractLength(content);
-        final char delimiter = extractDelimiter(content);
+        String trimmedContent = content.trim();
+        final int length = extractLength(trimmedContent);
+        final char delimiter = extractDelimiter(trimmedContent);
 
         final String fixed = "[" + length + delimiter + "]";
-        return source.substring(0, actualStart) + fixed + source.substring(actualEnd + 1);
+        return source.substring(0, actualStart) + fixed.replaceAll("\\s+", "") + source.substring(actualEnd + 1);
     }
 
     @Override

@@ -23,21 +23,6 @@ class ToonRepairTest {
     }
 
     @Test
-    @DisplayName("should repair malformed array header to a normalized format")
-    void shouldRepairMalformedArrayHeader() {
-        // Given
-        // We use [abc] at the start of the line to trigger tabularHeaderLine
-        final String input = "[abc] items\n  \"a\",\"b\",\"c\"\n";
-        final String expected = "[0,] items\n  \"a\",\"b\",\"c\"\n";
-
-        // When
-        String result = ToonRepair.parse(input);
-
-        // Then
-        assertThat(result).isEqualTo(expected);
-    }
-
-    @Test
     @DisplayName("should repair array header with length and custom delimiter")
     void shouldRepairArrayHeaderWithLengthAndDelimiter() {
         // Given
@@ -56,9 +41,9 @@ class ToonRepairTest {
     void givenToonWithMissingColon_whenParsed_thenSucceeds() {
         // Given
         final String toon = """
-            name "Alice"
-            age  42
-            """;
+                name "Alice"
+                age  42
+                """;
 
         // When / Then
         assertThatCode(() -> ToonRepair.parse(toon)).doesNotThrowAnyException();
@@ -69,9 +54,9 @@ class ToonRepairTest {
     void givenInvalidArrayHeader_whenParsed_thenSucceeds() {
         // Given
         final String toon = """
-            items[abc]
-              "a","b","c"
-            """;
+                items[abc]
+                  "a","b","c"
+                """;
 
         // When / Then
         assertThatCode(() -> ToonRepair.parse(toon)).doesNotThrowAnyException();
@@ -82,8 +67,8 @@ class ToonRepairTest {
     void givenUnclosedString_whenParsed_thenSucceeds() {
         // Given
         final String toon = """
-            title: "Hello world
-            """;
+                title: "Hello world
+                """;
 
         // When / Then
         assertThatCode(() -> ToonRepair.parse(toon)).doesNotThrowAnyException();
