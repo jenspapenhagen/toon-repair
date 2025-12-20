@@ -1,2 +1,3 @@
-# toon-repair
-try to repaining a given toon string
+# TOON Repair
+
+ANTLR-based repair-on-error pipeline with golden-file tests.
