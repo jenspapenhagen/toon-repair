@@ -74,4 +74,43 @@ class ToonRepairTest {
         assertThatCode(() -> ToonRepair.parse(toon)).doesNotThrowAnyException();
     }
 
+    @Test
+    @DisplayName("repairs unclosed string and parses successfully")
+    void givenValidToon_thenSucceeds() {
+        // Given
+        final String input = """
+                context:
+                 task: Our favorite hikes together
+                 location: Boulder
+                 season: spring_2025
+                
+                friends[3]: ana,luis,sam
+                
+                hikes[3]{id,name,distanceKm,elevationGain,companion,wasSunny}:
+                 1,Blue Lake Trail,7.5,320,ana,true
+                 2,Ridge Overlook,9.2,540,luis,false
+                 3,Wildflower Loop,5.1,180,sam,true
+                """;
+
+        final String expected = """
+                context:
+                 task: Our: favorite: hikes: together:
+                 location: Boulder
+                 season: spring_2025
+                
+                friends:[3]: ana,luis,sam
+                
+                hikes:[3,]{id,name:,distanceKm:,elevationGain:,companion:,wasSunny}:
+                 1,Blue: Lake: Trail:,7.5,320,ana:,true
+                 2,Ridge: Overlook:,9.2,540,luis:,false
+                 3,Wildflower: Loop:,5.1,180,sam:,true
+                """;
+
+        // When
+        final String result = ToonRepair.parse(input);
+
+        // Then
+        assertThat(result).isEqualTo(expected);
+    }
+
 }
